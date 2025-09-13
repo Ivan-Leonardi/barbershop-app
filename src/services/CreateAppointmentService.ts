@@ -1,4 +1,5 @@
 import { startOfHour } from 'date-fns'
+import { AppDataSource } from '../database/data-source'
 import Appointment from '../entities/Appointment'
 import AppointmentsRepository from '../repositories/AppointmentsRepository'
 
@@ -8,26 +9,25 @@ interface IRequest {
 }
 
 class CreateAppointmentService {
-  private appointmentsRepository: AppointmentsRepository
+  public async execute({ provider, date }: IRequest): Promise<Appointment> {
+    const appointmentsRepository = new AppointmentsRepository()
+    const repository = AppDataSource.getRepository(Appointment)
 
-  constructor(appointmentsRepository: AppointmentsRepository) {
-    this.appointmentsRepository = appointmentsRepository
-  }
-
-  public execute({ provider, date }: IRequest): Appointment {
     const appointmentDate = startOfHour(date)
 
     const findAppointmentInSameDate =
-      this.appointmentsRepository.findBydate(appointmentDate)
+      await appointmentsRepository.findByDate(appointmentDate)
 
     if (findAppointmentInSameDate) {
       throw Error('This appointment is already booked')
     }
 
-    const appointment = this.appointmentsRepository.create({
+    const appointment = repository.create({
       provider,
       date: appointmentDate,
     })
+
+    await repository.save(appointment)
 
     return appointment
   }

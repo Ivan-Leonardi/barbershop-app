@@ -6,7 +6,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:server": "tsx watch src/server.ts",
     "lint": "eslint src --ext .ts",
-    "lint:fix": "eslint src --ext .ts --fix"
+    "lint:fix": "eslint src --ext .ts --fix",
+    "typeorm": "typeorm-ts-node-commonjs -d ./src/database/data-source.ts",
+    "migration:create": "typeorm-ts-node-commonjs migration:create",
+    "migration:run": "npm run typeorm migration:run"
   },
   "keywords": [],
   "author": "",
@@ -15,15 +18,18 @@
   "devDependencies": {
     "@rocketseat/eslint-config": "^2.2.2",
     "eslint": "^8.57.1",
+    "ts-node": "^10.9.2",
     "tsx": "^4.20.5",
     "typescript": "^5.3.3",
     "typescript-eslint": "^8.43.0"
   },
   "dependencies": {
     "@types/express": "^5.0.3",
+    "@types/node": "^24.3.2",
     "date-fns": "^4.1.0",
     "express": "^5.1.0",
     "pg": "^8.16.3",
+    "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.26",
     "uuid": "^13.0.0"
   }

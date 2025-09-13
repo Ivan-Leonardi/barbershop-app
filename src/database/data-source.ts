@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 
 export const AppDataSource = new DataSource({
@@ -6,10 +5,11 @@ export const AppDataSource = new DataSource({
   host: 'localhost',
   port: 5432,
   username: 'postgres',
-  password: 'gobarber',
+  password: '1234',
   database: 'gobarber_postgres',
-  synchronize: true, // ⚠️ use só em dev, nunca em produção
+  synchronize: false,
   logging: true,
-  migrations: ['src/database/migrations/*.ts'],
+  entities: ['./src/entities/*.ts'],
+  migrations: ['./src/database/migrations/**/*.ts'],
   subscribers: [],
 })

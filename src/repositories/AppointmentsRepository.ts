@@ -1,35 +1,17 @@
-import { isEqual } from 'date-fns'
 import Appointment from '../entities/Appointment'
+import { AppDataSource } from '../database/data-source'
 
-interface ICreateAppointmentDTO {
-  provider: string
-  date: Date
-}
 class AppointmentsRepository {
-  private appointments: Appointment[]
+  private repository = AppDataSource.getRepository(Appointment)
 
-  constructor() {
-    this.appointments = []
-  }
-
-  public all(): Appointment[] {
-    return this.appointments
-  }
-
-  public findBydate(date: Date): Appointment | null {
-    const findAppointment = this.appointments.find((appointment) =>
-      isEqual(date, appointment.date),
-    )
+  public async findByDate(date: Date): Promise<Appointment | null> {
+    const findAppointment = await this.repository.findOne({
+      where: {
+        date,
+      },
+    })
 
     return findAppointment || null
-  }
-
-  public create({ provider, date }: ICreateAppointmentDTO): Appointment {
-    const appointment = new Appointment({ provider, date })
-
-    this.appointments.push(appointment)
-
-    return appointment
   }
 }
 
