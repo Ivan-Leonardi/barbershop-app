@@ -1,15 +1,16 @@
+/* eslint-disable camelcase */
 import { startOfHour } from 'date-fns'
 import { AppDataSource } from '../database/data-source'
 import Appointment from '../entities/Appointment'
 import AppointmentsRepository from '../repositories/AppointmentsRepository'
 
 interface IRequest {
-  provider: string
+  provider_id: string
   date: Date
 }
 
 class CreateAppointmentService {
-  public async execute({ provider, date }: IRequest): Promise<Appointment> {
+  public async execute({ provider_id, date }: IRequest): Promise<Appointment> {
     const appointmentsRepository = new AppointmentsRepository()
     const repository = AppDataSource.getRepository(Appointment)
 
@@ -23,7 +24,7 @@ class CreateAppointmentService {
     }
 
     const appointment = repository.create({
-      provider,
+      provider_id,
       date: appointmentDate,
     })
 

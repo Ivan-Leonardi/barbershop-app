@@ -1,0 +1,37 @@
+import { AppDataSource } from '../database/data-source'
+import User from '../entities/User'
+import bcrypt from 'bcryptjs'
+
+interface IRequest {
+  name: string
+  email: string
+  password: string
+}
+
+class CreateUserService {
+  public async execute({ name, email, password }: IRequest): Promise<User> {
+    const userRepository = AppDataSource.getRepository(User)
+
+    const checkUserExists = await userRepository.findOne({
+      where: { email },
+    })
+
+    if (checkUserExists) {
+      throw new Error('Email address already used.')
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 8)
+
+    const user = userRepository.create({
+      name,
+      email,
+      password: hashedPassword,
+    })
+
+    await userRepository.save(user)
+
+    return user
+  }
+}
+
+export default CreateUserService
