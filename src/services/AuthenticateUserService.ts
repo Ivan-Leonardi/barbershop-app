@@ -1,6 +1,7 @@
 import { AppDataSource } from '../database/data-source'
 import User from '../entities/User'
 import bcrypt from 'bcryptjs'
+import { sign } from 'jsonwebtoken'
 
 interface IRequest {
   email: string
@@ -9,6 +10,7 @@ interface IRequest {
 
 interface IResponse {
   user: User
+  token: string
 }
 
 class AuthenticateUserService {
@@ -27,8 +29,14 @@ class AuthenticateUserService {
       throw new Error('Incorrect email/password combination.')
     }
 
+    const token = sign({}, 'secret-key', {
+      subject: user.id,
+      expiresIn: '1d',
+    })
+
     return {
       user,
+      token,
     }
   }
 }

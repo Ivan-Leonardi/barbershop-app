@@ -9,12 +9,15 @@ sessionsRouter.post('/', async (request, response) => {
 
     const authenticateUserService = new AuthenticateUserService()
 
-    const { user } = await authenticateUserService.execute({ email, password })
+    const { user, token } = await authenticateUserService.execute({
+      email,
+      password,
+    })
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...userWithoutPassword } = user
 
-    return response.json({ user: userWithoutPassword })
+    return response.json({ user: userWithoutPassword, token })
   } catch (err) {
     return response
       .status(400)
