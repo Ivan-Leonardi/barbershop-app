@@ -3,6 +3,7 @@ import { startOfHour } from 'date-fns'
 import { AppDataSource } from '../database/data-source'
 import Appointment from '../entities/Appointment'
 import AppointmentsRepository from '../repositories/AppointmentsRepository'
+import AppError from '../errors/AppError'
 
 interface IRequest {
   provider_id: string
@@ -20,7 +21,7 @@ class CreateAppointmentService {
       await appointmentsRepository.findByDate(appointmentDate)
 
     if (findAppointmentInSameDate) {
-      throw Error('This appointment is already booked')
+      throw new AppError('This appointment is already booked')
     }
 
     const appointment = repository.create({

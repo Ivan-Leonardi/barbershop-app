@@ -4,25 +4,19 @@ import AuthenticateUserService from '../services/AuthenticateUserService'
 const sessionsRouter = Router()
 
 sessionsRouter.post('/', async (request, response) => {
-  try {
-    const { email, password } = request.body
+  const { email, password } = request.body
 
-    const authenticateUserService = new AuthenticateUserService()
+  const authenticateUserService = new AuthenticateUserService()
 
-    const { user, token } = await authenticateUserService.execute({
-      email,
-      password,
-    })
+  const { user, token } = await authenticateUserService.execute({
+    email,
+    password,
+  })
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: _, ...userWithoutPassword } = user
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { password: _, ...userWithoutPassword } = user
 
-    return response.json({ user: userWithoutPassword, token })
-  } catch (err) {
-    return response
-      .status(400)
-      .json({ error: err instanceof Error ? err.message : String(err) })
-  }
+  return response.json({ user: userWithoutPassword, token })
 })
 
 export default sessionsRouter

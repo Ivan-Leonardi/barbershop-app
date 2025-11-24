@@ -1,6 +1,7 @@
 import { AppDataSource } from '../database/data-source'
 import User from '../entities/User'
 import bcrypt from 'bcryptjs'
+import AppError from '../errors/AppError'
 
 interface IRequest {
   name: string
@@ -17,7 +18,7 @@ class CreateUserService {
     })
 
     if (checkUserExists) {
-      throw new Error('Email address already used.')
+      throw new AppError('Email address already used.')
     }
 
     const hashedPassword = await bcrypt.hash(password, 8)
