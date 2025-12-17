@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express, { Request, Response, NextFunction } from 'express'
 import routes from './routes'
 import { initDB } from './database'
@@ -8,7 +9,6 @@ const app = express()
 app.use(express.json())
 app.use('/files', express.static(upload.directory))
 app.use(routes)
-
 
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   if (err instanceof AppError) {
@@ -26,8 +26,10 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   })
 })
 
+const PORT = process.env.PORT || 3333
+
 initDB().then(() => {
-  app.listen(3333, () => {
-    console.log('🚀 Server is running on http://localhost:3333')
+  app.listen(PORT, () => {
+    console.log(`🚀 Server is running on http://localhost:${PORT}`)
   })
 })
