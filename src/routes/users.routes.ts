@@ -43,7 +43,6 @@ usersRouter.patch(
       avatarFileName: request.file.filename,
     })
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...userWithoutPassword } = user
 
     return response.json(userWithoutPassword)
